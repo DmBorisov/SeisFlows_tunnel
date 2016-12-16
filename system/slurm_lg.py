@@ -168,11 +168,11 @@ class slurm_lg(custom_import('system', 'base')):
 
     def _launch_args(self, hosts):
         if hosts == 'all':
-            args = ('--array=%d-%d ' % (0,PAR.NTASK-1)
+            args = ('--array=%d-%d% %50 ' % (0,PAR.NTASK-1)
                    +'--output %s ' % (PATH.SUBMIT+'/'+'output.slurm/'+'%A_%a'))
 
         elif hosts == 'head':
-            args = ('--array=%d-%d ' % (0,0)
+            args = ('--array=%d-%d% %50 ' % (0,0)
                    +'--output=%s ' % (PATH.SUBMIT+'/'+'output.slurm/'+'%j'))
 
         return args
