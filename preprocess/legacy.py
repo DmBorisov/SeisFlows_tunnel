@@ -39,6 +39,9 @@ class legacy(object):
 
         if 'NORMALIZE' not in PAR:
             setattr(PAR, 'NORMALIZE', True)
+	
+	if 'PAR_CULL' not in PAR:
+            setattr(PAR, 'PAR_CULL', True)
 
         # mute settings
         if 'MUTE' not in PAR:
@@ -188,6 +191,17 @@ class legacy(object):
             s[:,i] = self.adjoint(s[:,i], d[:,i], h.nt, h.dt)
 
         # apply adjoint filters
+	
+        # reject traces that have too high error
+        if PAR.CULL:
+            for ir in range(h.nr):
+                norm_d = np.linalg.norm(d[:,ir],ord=2)
+                #print(norm_d)
+                norm_r = np.linalg.norm(d[:,ir]-s[:,ir],ord=2)
+                #print(norm_r)
+                if norm_d < 0.3*norm_r:
+                  s[:,ir]=0.0
+
 
         # normalize traces (added by DmBorisov)
         if PAR.NORMALIZE:
